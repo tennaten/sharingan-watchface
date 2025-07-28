@@ -1,0 +1,11 @@
+app.id = "com.netrule.sharingan"
+app.type = "watchface"
+app.version = "1.0.0"
+
+device = "fenix5"
+
+source.dir = "source"
+resources.dir = "resources"
+
+[watchface]
+main = "WatchFaceApp"

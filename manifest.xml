@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest xmlns="http://www.garmin.com/xml/connectiq" version="1.0">
+
+  <!-- Główna aplikacja: wskazuje na WatchFaceApp.mc -->
+  <application
+      id="com.netrule.sharinganwatchface.emilv1abcdefghijklmnopqrstu"
+      type="watchface"
+      entry="WatchFaceApp"
+      launcherIcon="launcher_icon.png"
+      name="Sharingan Watchface" />
+
+  <!-- Uprawnienia potrzebne do wyświetlania czasu i tętna -->
+  <permissions>
+    <permission id="System.clock"/>
+    <permission id="Sensor.HeartRate"/>
+  </permissions>
+
+  <!-- Urządzenie docelowe -->
+  <products>
+    <product id="fenix5"/>
+  </products>
+
+</manifest>
