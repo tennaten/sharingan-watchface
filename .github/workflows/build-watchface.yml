@@ -2,38 +2,39 @@ name: Build Sharingan Watchface
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout sources
-        uses: actions/checkout@v3
+    - name: Checkout repo
+      uses: actions/checkout@v4
 
-      - name: Set up Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '11'
+    - name: Join SDK parts
+      run: |
+        cat .ciq/connectiq-sdk-win-8.2.2-2025-07-17-cf29b22d5.zip.0* > sdk.zip
+        unzip -q sdk.zip -d sdk
 
-      - name: Download Connect IQ SDK 8.2.2
-        run: |
-          wget https://download.garmin.com/connectiq/SDK/connectiq-sdk-8.2.2.zip
-          unzip connectiq-sdk-8.2.2.zip -d ciq-sdk
+    - name: Set up Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: 17
 
-      - name: Build Watchface
-        run: |
-          export CIQ_SDK=ciq-sdk/connectiq-sdk-8.2.2
-          $CIQ_SDK/bin/monkeyc \
-            -d fenix5 \
-            -m manifest.xml \
-            -z resources \
-            -y mykey.der \
-            -o SHARINGAN.PR3
+    - name: Build with monkeyc
+      run: |
+        sdk_dir=$(find $PWD/sdk -type d -name 'connectiq-sdk*' | head -n1)
+        "$sdk_dir/bin/monkeyc" \
+          -d fenix5 \
+          -m manifest.xml \
+          -z resources \
+          -y mykey.der \
+          -o Sharingan.PR3
 
-      - name: Upload PR3 artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: SHARINGAN-watchface
-          path: SHARINGAN.PR3
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: SharinganPR3
+        path: Sharingan.PR3
