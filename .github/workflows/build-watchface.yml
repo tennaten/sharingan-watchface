@@ -17,6 +17,10 @@ jobs:
         cat .ciq/connectiq-sdk-win-8.2.2-2025-07-17-cf29b22d5.zip.0* > sdk.zip
         unzip -q sdk.zip -d sdk
 
+    - name: Set execute permissions on SDK binaries
+      run: |
+        chmod +x sdk/*/bin/*
+
     - name: Set up Java
       uses: actions/setup-java@v4
       with:
