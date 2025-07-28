@@ -1,0 +1,39 @@
+name: Build Sharingan Watchface
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: adopt
+          java-version: '11'
+
+      - name: Download Connect IQ SDK 6.3.0
+        run: |
+          wget https://download.garmin.com/connectiq/SDK/connectiq-sdk-6.3.0.zip
+          unzip connectiq-sdk-6.3.0.zip -d ciq-sdk
+
+      - name: Build Watchface
+        run: |
+          export CIQ_SDK=ciq-sdk/connectiq-sdk-6.3.0
+          $CIQ_SDK/bin/monkeyc \
+            -d fenix5 \
+            -m manifest.xml \
+            -z resources \
+            -y mykey.der \
+            -o SHARINGAN.PR3
+
+      - name: Upload PR3 artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: SHARINGAN-watchface
+          path: SHARINGAN.PR3
